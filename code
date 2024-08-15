@@ -57,26 +57,31 @@ contract ERC20 {
         emit Transfer(msg.sender, address(0), amount);
     }
 
-    function switchCharacter(uint characterIndex) external {
-        require(characterIndex >= 1 && characterIndex <= 3, "Invalid character index");
+    string public playerName;
+    uint256 public playerScore;
 
-        string memory newCharacter;
-
-        if (characterIndex == 1) {
-            newCharacter = "Trevor";
-        } else if (characterIndex == 2) {
-            newCharacter = "Michael";
-        } else if (characterIndex == 3) {
-            newCharacter = "Franklin";
-        }
-
-        characterOf[msg.sender] = newCharacter;
-        emit CharacterSwitched(msg.sender, newCharacter);
+    function setPlayerInfo(string memory _playerName, uint256 _playerScore) public {
+        playerName = _playerName;
+        playerScore = _playerScore;
     }
 
-    function getCharacterOf(address player) external view returns (string memory) {
-        return characterOf[player];
+    function getPlayerAchievement(string memory _name) public view returns (string memory) {
+    string memory achievement;
+    
+    if (playerScore >= 1000) {
+        achievement = "Master Gamer";
+    } else if (playerScore >= 500) {
+        achievement = "Advanced Gamer";
+    } else if (playerScore >= 100) {
+        achievement = "Intermediate Gamer";
+    } else {
+        achievement = "Beginner Gamer";
     }
+
+    return string(abi.encodePacked("Congratulations ", _name, "! You've achieved the title of '", achievement, "'."));
+}
+
+
 }
 
 interface IERC20 {
